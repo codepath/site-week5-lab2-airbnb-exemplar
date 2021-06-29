@@ -1,0 +1,50 @@
+{
+  "name": "kavholm-express-api",
+  "version": "1.0.0",
+  "description": "AirBnB Clone - Kavholm BnB for Celebrities built with Node, Express, and PostgreSQL",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "dev": "NODE_ENV=dev nodemon server.js",
+    "dev-win": "set NODE_ENV=dev && nodemon server.js",
+    "test": "jest -i",
+    "test:app": "jest -i app.test.js",
+    "test:config": "jest -i config.test.js",
+    "test:middleware": "jest -i middleware/",
+    "test:middleware:permissions": "jest -i middleware/permissions.test.js",
+    "test:middleware:security": "jest -i middleware/security.test.js",
+    "test:models": "jest -i models/",
+    "test:models:booking": "jest -i models/booking.test.js",
+    "test:models:listing": "jest -i models/listing.test.js",
+    "test:models:user": "jest -i models/user.test.js",
+    "test:routes": "jest -i routes/",
+    "test:routes:auth": "jest -i routes/auth.test.js",
+    "test:routes:bookings": "jest -i routes/bookings.test.js",
+    "test:routes:listings": "jest -i routes/listings.test.js",
+    "test:utils:tokens": "jest -i utils/tokens.test.js"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "config.js",
+      "/tests/*"
+    ]
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.7",
+    "pg": "^8.6.0"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "supertest": "^6.1.3"
+  }
+}
