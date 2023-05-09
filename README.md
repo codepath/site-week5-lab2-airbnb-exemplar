@@ -1,18 +1,17 @@
-# AirBnB Clone Part 1
+# AirBnB Exemplar
 
 For this lab, interns will be creating a clone of AirBnB - a modern booking platform for local bed and breakfasts. This competitor application will be geared towards celebrities only, in the hopes of attracting the highest revenue customers to the platform. Celebrities should be able to sign up, list any of their personal residences, and let other celebrities book trips to stay in their houses.
 
 We'll start on the backend side of things and focus on writing tests to verify that the backend is working correctly, as well as use TDD to implement new functionality in our application.
 
-
 ## Things to Know
 
 This lab will help SITE interns master:
+
 + Writing tests for an Express backend with Jest
 + Simulating HTTP requests with Supertest
 + Using TDD to design and implement new features
 + Verifying permissions with custom API middleware
-
 
 ## Goals
 
@@ -55,10 +54,10 @@ This lab will help SITE interns master:
       + It should ensure that the `startDate` and `endDate` properties exist on the `newBooking` object, or it should throw a 400 error.
       + It should execute a query that does the following:
         + Inserts values in the `payments` table for the following columns:
-        + `payment_method` - should either be `newBooking.paymentMethod` or default to `"card"` 
+        + `payment_method` - should either be `newBooking.paymentMethod` or default to `"card"`
         + `start_date` - should come from `newBooking.startDate` and should be cast to a date
         + `end_date` - should come from `newBooking.end_date` and should be cast to a date
-        + `guests` - should come from `newBooking.guests` or default to `1`. 
+        + `guests` - should come from `newBooking.guests` or default to `1`.
         + `total_cost` - this one is tricky. It should be a calculation wrapping in a `CEIL` function to round up. The calculation should:
           + Determine the number of days by subtracting the `start_date` cast to a date from the `end_date` cast to a date and adding `1`
           + Determine the price of one night by adding `10%` to the `listing.price` for "marketplace fees". This can be done by multipling `listing.price` by `1.1`
@@ -66,7 +65,7 @@ This lab will help SITE interns master:
           + Wrap the whole calculation in a `CEIL` function
         + `listing_id` should come from `listing.id`
         + `user_id` should use a subquery to the get the `id` of the user from `user.username`.
-      + The query should use the `RETURNING` clause to return 
+      + The query should use the `RETURNING` clause to return
         + `id`
         + `start_date` aliased as `"startDate"`
         + `end_date` aliased as `"endDate"`
@@ -85,13 +84,13 @@ This lab will help SITE interns master:
     + Add a new `describe("POST bookings/listings/:listingId"` block:
     + Create two new test cases in it:
       + **Test**: `Authed user can book a listing they don't own.`
-        + First, it should select one of the listing ids from the `testListingIds` array. Look at the values for that listing in the `tests/createListings.js` file. 
+        + First, it should select one of the listing ids from the `testListingIds` array. Look at the values for that listing in the `tests/createListings.js` file.
         + Create an object called `data` with a single `newBooking` property on it. Set that key equal to an object with the `startDate`, `endDate`, and `guests` properties on it.
         + Then it should make a `POST` request to the `/bookings/listings/:listingId` route. Make sure to set the authorization header on the post request using the `jloToken`. Send the `data` object in that post request.
         + Expect the response code to be `201`.
         + Finally, it should check that the booking returned by that method is equal to an expected booking, containing the properties: `id`, `startDate`, `endDate`, `paymentMethod`, `guests`, `listingId`, `username`, `userId`, and `createdAt`. Use exact values or `expect.any` matchers when necessary. 
       + **Test**: `Throws a Bad Request error when user attempts to book their own listing`
-        + First, select the `listingId` with an index of `0` in the `testListingIds` array. This is owned by the user with the `lebronToken`. Look at the values for that listing in the `tests/createListings.js` file. 
+        + First, select the `listingId` with an index of `0` in the `testListingIds` array. This is owned by the user with the `lebronToken`. Look at the values for that listing in the `tests/createListings.js` file.
         + Create an object called `data` with a single `newBooking` property on it. Set that key equal to an object with the `startDate`, `endDate`, and `guests` properties on it.
         + Then it should make a `POST` request to the `/bookings/listings/:listingId` route. Make sure to set the authorization header on the post request using the `lebronToken`. Send the `data` object in that post request.
         + Expect the response code to be 400.
@@ -118,7 +117,7 @@ This lab will help SITE interns master:
       + `Fetches all of the bookings for a single listing`
         + Should check that all bookings are returned when a valid listing id is provided
       + `Returns empty array when listing has no bookings`
-        + Should check that an empty array is returned when a valid listing id is provided that has no bookings 
+        + Should check that an empty array is returned when a valid listing id is provided that has no bookings
     + The endpoint should be a `GET` request at the `/bookings/listings/:listingId` route.
       + Write the following tests, using the existing ones as a guide:
         + `Listing owner can fetch all bookings for a single listing`
@@ -127,13 +126,13 @@ This lab will help SITE interns master:
           + Should check that a user who is NOT the owner of the listing receives a 403 Forbidden Error when attempting to hit the endpoint
         + `Unknown listing id throws a 404 error`
           + Should check that a 404 error is thrown when a `listingId` is provided that doesn't match a listing in the database
-  + Implement the new route, making sure to use two middleware: 
+  + Implement the new route, making sure to use two middleware:
     + One that checks for the existence of an authenticated user
     + One that ensures that the authenticated user is the owner of the listing
   + Implement the model method that takes in a `listingId` and fetches all bookings for that listing. Use the other queries as a guide.
   + Make sure all the tests are passing!
 + Modify the bookings model to only allow a single resident to book a listing for a given date range
   + Write tests to ensure that an error is thrown if a user tries to book a listin that already has a booking confirmed for any of the dates that the user submits.
-+ Create a new set of permissions functions that provide admin access to users who are saved in the database as admin. 
++ Create a new set of permissions functions that provide admin access to users who are saved in the database as admin.
   + They should have privileges that allow them to access/update/modify/create all resources.
   + Write a test suite in Jest to ensure that admin are provided all admin privileges throughout the application.
